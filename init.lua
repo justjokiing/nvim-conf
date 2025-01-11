@@ -35,3 +35,16 @@ require "nvchad.autocmds"
 vim.schedule(function()
   require "mappings"
 end)
+
+-- autocmd to always run typos_lsp, but deferred
+-- deferred 500ms to allow other lsp to attach first
+vim.api.nvim_create_augroup('lspconfig', { clear = false })
+vim.api.nvim_create_autocmd({"BufReadPost"}, {
+  group = 'lspconfig',
+  callback = function ()
+    vim.defer_fn(
+      require("lspconfig.configs")["typos_lsp"].launch, 500
+    )
+  end,
+})
+

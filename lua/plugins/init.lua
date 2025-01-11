@@ -22,4 +22,50 @@ return {
   -- 		},
   -- 	},
   -- },
+  
+  { "lervag/vimtex", lazy = false, },
+
+  {
+    "hrsh7th/nvim-cmp",
+    require("cmp").setup.filetype("tex", {
+      sources = {
+        { name = 'vimtex' },
+        -- { name = "lua-latex-symbols"},
+        -- other sources
+      },
+    }),
+
+  },
+
+  -- latex completions
+  {
+    "micangl/cmp-vimtex",
+    ft = "tex",
+  },
+
+  {
+      "iamcco/markdown-preview.nvim",
+      cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+      ft = { "markdown" },
+      build = function() vim.fn["mkdp#util#install"]() end,
+  },
+
+  {
+    "hedyhli/outline.nvim",
+    lazy = true,
+    cmd = { "Outline", "OutlineOpen" },
+    keys = { -- Example mapping to toggle outline
+      { "<leader>o", "<cmd>Outline<CR>", desc = "Toggle outline" },
+    },
+    opts = {
+      -- Your setup opts here
+    },
+  },
+
+  {
+    "mfussenegger/nvim-lint",
+    config = function ()
+      require "configs.nvim-lint"
+    end
+  },
 }
