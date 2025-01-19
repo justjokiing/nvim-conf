@@ -48,3 +48,33 @@ vim.api.nvim_create_autocmd({"BufReadPost"}, {
   end,
 })
 
+-- Restore cursor to file position in previous editing session
+vim.api.nvim_create_autocmd('BufReadPost', {
+  desc = 'Recover previous cursor position in buffer',
+  pattern = { '*' },
+  callback = function()
+    if (vim.fn.line("'\"") > 0 and vim.fn.line("'\"") <= vim.fn.line("$")) then
+      vim.fn.execute("normal! g`\"zz")
+    end
+  end
+
+})
+
+ -- removes trailing whitespace on save
+vim.api.nvim_create_autocmd("BufWritePre", {
+    callback = function()
+        local save_cursor = vim.fn.getpos(".")
+        vim.cmd([[%s/\s\+$//e]])
+        vim.fn.setpos(".", save_cursor)
+    end,
+})
+
+-- Auto resize splits when the terminal's window is resized
+vim.api.nvim_create_autocmd({ "VimResized" }, {
+  callback = function()
+    local current_tab = vim.api.nvim_get_current_tabpage()
+    vim.cmd("tabdo wincmd =")
+    vim.api.nvim_set_current_tabpage(current_tab)
+  end,
+  desc = "Resize splits with terminal window",
+})
